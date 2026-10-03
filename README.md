@@ -10,7 +10,24 @@ per-expert K2 / K3 / K5 mix, **2.77 bpw** average. Everything else (attention, s
 tables, DSpark/MTP draft layers, vision tower, embeddings, head) is the upstream checkpoint, byte for byte. The
 server image is `ghcr.io/0xsero/deepseek-v4.1-flash-spark` (vLLM with the EXL3 MoE path and the B12X Spark kernels).
 
+## Image publication and acceptance
+
+The approved CI image is
+`ghcr.io/0xsero/deepseek-v4.1-flash-spark@sha256:3cbc8ec016f5fbfc82eba3480de12399cbce31e7b76aa3108b8fe8246c42a79d`,
+from [GitHub-hosted main build 37138684406](https://github.com/0xSero/local-ai-images/actions/runs/37138684406)
+at source `93e001cf4ecafeb71c6e737eeefad9a9b4ce9235`, with verified signed provenance.
+Fresh acceptance on this exact image and the final public checkpoint layout is pending in
+[registry PR #154](https://github.com/0xSero/local-ai-registry/pull/154).
+
+The launcher still defaults to the historical host-built image `5668e35e` shown below. To exercise the CI
+candidate, export `IMG` with the full `3cbc8ec0` image reference above before running `scripts/launch.sh`.
+An image build or readiness response alone does not establish the six model acceptance gates.
+
 ## Measured
+
+These measurements and six-gate results used the historical host image `5668e35e` and the full upstream
+checkpoint plus separate expert banks. They have not been relabeled as results for the CI image or the
+compact public checkpoint used by this repository's download and launch scripts.
 
 Two DGX Spark (GB10), TP2 over RoCE, FP8 KV cache, DSpark speculative decoding (7 draft tokens), Engram tables read
 from disk, CUDA graphs `FULL_DECODE_ONLY`, 2 concurrent sequences. All decode runs used the model's default
