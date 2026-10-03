@@ -122,6 +122,9 @@ The model entry: reasoning on, text + image input, 262,144 context, tools via th
 Pi thinking levels map to the server's `reasoning_effort` as minimal/low -> `low`, medium/high -> `high`,
 xhigh/max -> `max`. The key is read from `$DSV41_API_KEY` at request time and is never written to Pi's config.
 
+Checked with Pi 1.0.0 against the served model: a `read` tool call followed by the answer, at thinking levels low
+and high; with the extension the request carries no `max_completion_tokens` (without it Pi sent 249,729).
+
 ## Configuration
 
 `scripts/launch.sh` reproduces the measured configuration. Main settings (override via environment):
@@ -165,6 +168,7 @@ memory guard log). The HF directory is mounted read-only at `/model`; the EXL3 a
 - **`missing .../model-00005-of-00006.safetensors`**: the Engram shards were not reassembled; re-run
   `scripts/download.sh` (it resumes and skips finished steps).
 - **Pi shows no model**: `DSV41_API_KEY` must be set in the shell that starts Pi; run `/model` to reload.
+- **`pi -p` hangs in a script**: print mode also reads stdin when it is not a terminal; add `< /dev/null`.
 
 ## Repository layout
 
